@@ -1,4 +1,4 @@
 function [] = helloWorld()
-fprintf("hello");
+fprintf("hello world");
 end
 
