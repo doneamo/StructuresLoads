@@ -1,10 +1,10 @@
 
 % Plot lift distribution for Q4.1
- m = 591;           %Nombre de point de donné
+ m = 591;                %Nombre de point de donné
  Cr=17.15;               %Corde à l'emplenture [ft]
- Ct=10.3;              %Corde au bout d'aile [ft]
+ Ct=10.3;                %Corde au bout d'aile [ft]
  nUltPos=3.25;           %Facteur de chargement limite positif
- b=118;                 %Envergure [ft]
+ b=118;                  %Envergure [ft]
  W=121368;               %Poids [lbf]
  B=2*W*nUltPos/b/(Cr+Ct);
  pente=(Ct-Cr)*2/b;
@@ -54,8 +54,29 @@
 %  for e = 1:1:2
 %      C(1,e) = (e-1)*Trap(1,m);
 % end
-%  
+  
+
+
+%%%%%%%% Substracting the sutructure weight and the fuel weight%%%%%
+Wwing=7747      %Poids des ailes [lbf]    les deux ailes
+
+B1=-4*Wwing/2/(Cr+Ct)/b
+
+ %Poids linéaire de la structure
+ PoidsL = zeros(1,m);
+ for g = 1:1:m
+     PoidsL(1,g) = B1*(pente*y(1,g) + Cr);
+ end
+ 
+ 
+ 
+ 
+ %%%%%%%%%%%%%%%%% Plotting section %%%%%%%%%%%%%%%%
   plot(y,L,'k')
+  hold on
+  plot(close,L_close,'k')
+  hold on
+  plot(y,PoidsL)
   hold on
 %  plot(y,Ellipse,'r')
 %  hold on
@@ -63,10 +84,8 @@
 %  hold on
 %  plot(D,C,'b')
 %  grid on
-  plot(close,L_close,'k')
-  hold on
  grid minor
  xlabel('Wing Station,y [ft]')
- ylabel('Lift, L(y) [lb_f]')
+ ylabel('Lift, l(y) [lb_f/ft]')
 
 
