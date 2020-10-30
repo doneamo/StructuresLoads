@@ -3,7 +3,7 @@
  m = 591;                %Nombre de point de donné
  Cr=17.15;               %Corde à l'emplenture [ft]
  Ct=10.3;                %Corde au bout d'aile [ft]
- nUltPos=3.25;           %Facteur de chargement limite positif
+ nUltPos=3.25*1.5;           %Facteur de chargement limite positif
  b=118;                  %Envergure [ft]
  W=121368;               %Poids [lbf]
  B=2*W*nUltPos/b/(Cr+Ct);
@@ -41,8 +41,8 @@
      close(1,a) = b/2;
  end
  L_close = zeros(1,2);
- for b = 1:1:2
-     L_close(1,b) = L(1,m)*(b-1);
+ for f = 1:1:2
+     L_close(1,f) = L(1,m)*(f-1);
  end
  
  %Close off trapezoidal distribution
@@ -58,16 +58,17 @@
 
 
 %%%%%%%% Substracting the sutructure weight and the fuel weight%%%%%
-Wwing=7747      %Poids des ailes [lbf]    les deux ailes
+Wwing=7747    %Poids des ailes [lbf]    les deux ailes
 
-B1=-4*Wwing/2/(Cr+Ct)/b
+B1=-2*nUltPos*Wwing/(Cr+Ct)/b
 
  %Poids linéaire de la structure
  PoidsL = zeros(1,m);
  for g = 1:1:m
-     PoidsL(1,g) = B1*(pente*y(1,g) + Cr);
+     PoidsL(1,g) = -2*nUltPos*Wwing/b/(Ct+Cr)*(2*(Ct-Cr)/b*y(1,g) + Cr);
  end
  
+ %Poids linéaire de l'essence
  
  
  
