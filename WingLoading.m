@@ -113,7 +113,7 @@
   hold on
   plot(y,FuelW, 'k-^', 'MarkerIndices', 5:80:length(FuelW)) %Fuel Weight
   hold on
-  plot(y, TrueLinearShearForce, 'k-s', 'MarkerIndices', 5:80:length(TrueLinearShearForce)) %combo
+  plot(y, TrueLinearShearForce, 'k-s', 'MarkerIndices', 5:80:length(TrueLinearShearForce), 'LineWidth', 2) %combo
   hold on
   plot(close,L_close,'k') %to close off lift distribution
   hold on
@@ -127,11 +127,12 @@
  xlabel('Wing Station,y [ft]')
  ylabel('Wing Loading, [lb_f/ft]')
  legend('Lift Distribution', 'Wing Weight', 'Fuel Weight', 'Total Wing Loading')
-
+ 
+ 
  figure(2)
   plot(y, ShearForce, 'k')
   hold on
-   grid on
+  grid on
  xlabel('Wing Station,y [ft]')
  ylabel('Wing Shear Force, [lb_f]')
-
+text(0, ShearForce(1,1),'\leftarrow V_z at wing root = ')
