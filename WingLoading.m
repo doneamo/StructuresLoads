@@ -146,6 +146,6 @@ Moment = zeros(1,m);
  xlabel('Wing Span ,y [ft]')
  ylabel('Moment, [lb_f] ft')
 
-
+testeste
 
 testestestest
