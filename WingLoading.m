@@ -92,7 +92,6 @@
  %%%%%%%%%%% Shear Stress and Moment equations %%%%%%%%%%%%%%%%
 
  ShearForce = zeros(1,m);
-
  for p = m-1:-1:1
      ShearForce(1,p) = TrueLinearShearForce(1,p)*b/2/(m-1)+ShearForce(1,p+1);
      if round(yMotor1,1)==y(1,p)
@@ -102,7 +101,10 @@
      end
  end
  
- 
+Moment = zeros(1,m);
+ for q = m-1:-1:1
+     Moment(1,q) = ShearForce(1,q)*b/2/(m-1)+ Moment(1,q+1);
+ end
  
  
  %%%%%%%%%%%%%%%%% Plotting section %%%%%%%%%%%%%%%%
@@ -134,3 +136,9 @@
  xlabel('Wing Span ,y [ft]')
  ylabel('Wing Shear Force, [lb_f]')
 
+ figure(3)
+  plot(y, Moment)
+  hold on
+   grid minor
+ xlabel('Wing Span ,y [ft]')
+ ylabel('Moment, [lb_f] ft')
