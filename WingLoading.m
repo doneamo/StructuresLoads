@@ -147,3 +147,4 @@ Moment = zeros(1,m);
 
 text(0, ShearForce(1,1),'\leftarrow V_z at wing root = ')
 
+testestestest
