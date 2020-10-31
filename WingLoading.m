@@ -103,7 +103,7 @@
  
 Moment = zeros(1,m);
  for q = m-1:-1:1
-     Moment(1,q) = ShearForce(1,q)*b/2/(m-1)+ Moment(1,q+1);
+     Moment(1,q) = -ShearForce(1,q)*b/2/(m-1)+ Moment(1,q+1);
  end
  
  
