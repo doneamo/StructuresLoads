@@ -107,15 +107,15 @@
  
  %%%%%%%%%%%%%%%%% Plotting section %%%%%%%%%%%%%%%%
  figure(1)
-  plot(y,L,'k')
+  plot(y,L,'k-+', 'MarkerIndices', 5:80:length(L)) %lift distribution
   hold on
-  plot(close,L_close,'k')
+  plot(y,PoidsL, 'k-o', 'MarkerIndices', 5:80:length(PoidsL)) %Wing Weight
   hold on
-  plot(y,PoidsL)
+  plot(y,FuelW, 'k-^', 'MarkerIndices', 5:80:length(FuelW)) %Fuel Weight
   hold on
-  plot(y,FuelW)
+  plot(y, TrueLinearShearForce, 'k-s', 'MarkerIndices', 5:80:length(TrueLinearShearForce)) %combo
   hold on
-  plot(y, TrueLinearShearForce)
+  plot(close,L_close,'k') %to close off lift distribution
   hold on
 %  plot(y,Ellipse,'r')
 %  hold on
@@ -123,14 +123,15 @@
 %  hold on
 %  plot(D,C,'b')
 %  grid on
- grid minor
+ grid on
  xlabel('Wing Station,y [ft]')
- ylabel('Lift, l(y) [lb_f/ft]')
+ ylabel('Wing Loading, [lb_f/ft]')
+ legend('Lift Distribution', 'Wing Weight', 'Fuel Weight', 'Total Wing Loading')
 
  figure(2)
-  plot(y, ShearForce)
+  plot(y, ShearForce, 'k')
   hold on
-   grid minor
- xlabel('Wing Span ,y [ft]')
+   grid on
+ xlabel('Wing Station,y [ft]')
  ylabel('Wing Shear Force, [lb_f]')
 
