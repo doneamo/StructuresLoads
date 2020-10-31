@@ -10,15 +10,14 @@
  Dfuselage=15.08;        %Diamètre du fuselage
  WeightMotor=971;         %Poids d'un moteur [lbf]
  RadiusMotor=8.75;        %Diamètre des hélices
- yMoteur1=1*RadiusMotor+Dfuselage/2;
- yMoteur2=3*RadiusMotor+Dfuselage/2;
+ yMotor1=1*RadiusMotor+Dfuselage/2;
+ yMotor2=3*RadiusMotor+Dfuselage/2;
  
  %Matrice de l'envergure
  y = zeros(1,m);
  for i = 1:1:m
      y(1,i) = -b/2/(m-1) + b/2/(m-1)*i;
  end
-
 
   %Generate Elliptical Distribution
  Ellipse = zeros(1,m);
@@ -90,7 +89,18 @@
      TrueLinearShearForce(1,o) = L(1,o)+PoidsL(1,o)+FuelW(1,o);
  end
  
- 
+ %%%%%%%%%%% Shear Stress and Moment equations %%%%%%%%%%%%%%%%
+
+ ShearForce = zeros(1,m);
+
+ for p = m-1:-1:1
+     ShearForce(1,p) = TrueLinearShearForce(1,p)*b/2/(m-1)+ShearForce(1,p+1);
+     if round(yMotor1,1)==y(1,p)
+         ShearForce(1,p)=ShearForce(1,p)-2*WeightMotor*nUltPos;
+     elseif round(yMotor2,1)==y(1,p)
+         ShearForce(1,p)=ShearForce(1,p)-2*WeightMotor*nUltPos;
+     end
+ end
  
  
  
@@ -117,4 +127,10 @@
  xlabel('Wing Station,y [ft]')
  ylabel('Lift, l(y) [lb_f/ft]')
 
+ figure(2)
+  plot(y, ShearForce)
+  hold on
+   grid minor
+ xlabel('Wing Span ,y [ft]')
+ ylabel('Wing Shear Force, [lb_f]')
 
