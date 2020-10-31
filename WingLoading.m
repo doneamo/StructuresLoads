@@ -140,12 +140,9 @@ Moment = zeros(1,m);
  text(0, ShearForce(1,1),'\leftarrow V_z at wing root = ')
  
  figure(3)
-  plot(y, Moment)
+  plot(y, Moment, 'k')
   hold on
-   grid minor
+   grid on
  xlabel('Wing Span ,y [ft]')
- ylabel('Moment, [lb_f] ft')
-
-testeste
-
-testestestest
+ ylabel('Moment, [lb_f ft]')
+ text(0, Moment(1,1),'\leftarrow M_x at wing root = ')
