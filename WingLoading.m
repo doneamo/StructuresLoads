@@ -7,6 +7,12 @@
  W=121904;               %Poids [lbf]
  Wwing=7776/2;              %Poids de une aile [lbf]  
  Wfuel=27162.5;           %Poids du gaz pour une aile [lbf]
+ Dfuselage=15.08;           %Diamètre du fuselage
+ WeightEngine=7768;         %Poids d'un moteur [lbf]
+ Wpropeller=15560    
+ Wpropulsion=3351
+ WeightPropSyst=(WeightEngine+Wpropeller+Wpropulsion)/4            %Only 1 unit
+ RadiusMotor=8.75;        %Diamètre des hélices
  Dfuselage=15.08;        %DiamÃ¨tre du fuselage
  WeightMotor=971;         %Poids d'un moteur [lbf]
  RadiusMotor=8.75;        %DiamÃ¨tre des hÃ©lices
@@ -95,9 +101,9 @@
  for p = m-1:-1:1
      ShearForce(1,p) = TrueLinearShearForce(1,p)*b/2/(m-1)+ShearForce(1,p+1);
      if round(yMotor1,1)==y(1,p)
-         ShearForce(1,p)=ShearForce(1,p)-2*WeightMotor*nUltPos;
+         ShearForce(1,p)=ShearForce(1,p)-2*WeightPropSyst*nUltPos;
      elseif round(yMotor2,1)==y(1,p)
-         ShearForce(1,p)=ShearForce(1,p)-2*WeightMotor*nUltPos;
+         ShearForce(1,p)=ShearForce(1,p)-2*WeightPropSyst*nUltPos;
      end
  end
  
@@ -144,5 +150,7 @@ Moment = zeros(1,m);
   hold on
    grid on
  xlabel('Wing Span ,y [ft]')
+ ylabel('Moment, [lb_f] ft')
  ylabel('Moment, [lb_f ft]')
  text(0, Moment(1,1),'\leftarrow M_x at wing root = ')
+
