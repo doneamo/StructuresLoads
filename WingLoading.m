@@ -7,20 +7,17 @@
  W=121904;               %Poids [lbf]
  Wwing=7776/2;              %Poids de une aile [lbf]  
  Wfuel=27162.5;           %Poids du gaz pour une aile [lbf]
-<<<<<<< HEAD
  Dfuselage=15.08;           %Diamètre du fuselage
  WeightEngine=7768;         %Poids d'un moteur [lbf]
  Wpropeller=15560    
  Wpropulsion=3351
  WeightPropSyst=(WeightEngine+Wpropeller+Wpropulsion)/4            %Only 1 unit
  RadiusMotor=8.75;        %Diamètre des hélices
-=======
  Dfuselage=15.08;        %DiamÃ¨tre du fuselage
  WeightMotor=971;         %Poids d'un moteur [lbf]
  RadiusMotor=8.75;        %DiamÃ¨tre des hÃ©lices
->>>>>>> 8ce3b530704595320c5dba60e0ced307386acb47
- yMotor1=1*RadiusMotor+Dfuselage/2;
- yMotor2=3*RadiusMotor+Dfuselage/2;
+ yMotor1=1*RadiusMotor+Dfuselage/2+1;
+ yMotor2=3*RadiusMotor+Dfuselage/2+2;
  
  %Matrice de l'envergure
  y = zeros(1,m);
@@ -153,9 +150,7 @@ Moment = zeros(1,m);
   hold on
    grid on
  xlabel('Wing Span ,y [ft]')
-<<<<<<< HEAD
  ylabel('Moment, [lb_f] ft')
-=======
  ylabel('Moment, [lb_f ft]')
  text(0, Moment(1,1),'\leftarrow M_x at wing root = ')
->>>>>>> 8ce3b530704595320c5dba60e0ced307386acb47
+
