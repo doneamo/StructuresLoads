@@ -10,8 +10,8 @@
  Dfuselage=15.08;        %Diamètre du fuselage
  WeightMotor=971;         %Poids d'un moteur [lbf]
  RadiusMotor=8.75;        %Diamètre des hélices
- yMotor1=1*RadiusMotor+Dfuselage/2;
- yMotor2=3*RadiusMotor+Dfuselage/2;
+ yMotor1=1*RadiusMotor+Dfuselage/2+1;
+ yMotor2=3*RadiusMotor+Dfuselage/2+2;
  
  %Matrice de l'envergure
  y = zeros(1,m);
