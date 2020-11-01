@@ -1,18 +1,24 @@
 
- m = 591;                %Nombre de point de donné
- Cr=17.15;               %Corde à l'emplenture [ft]
+ m = 591;                %Nombre de point de donnÃ©
+ Cr=17.15;               %Corde Ã  l'emplenture [ft]
  Ct=10.3;                %Corde au bout d'aile [ft]
  nUltPos=3.25*1.5;           %Facteur de chargement limite positif
  b=118;                  %Envergure [ft]
  W=121904;               %Poids [lbf]
  Wwing=7776/2;              %Poids de une aile [lbf]  
  Wfuel=27162.5;           %Poids du gaz pour une aile [lbf]
+<<<<<<< HEAD
  Dfuselage=15.08;           %Diamètre du fuselage
  WeightEngine=7768;         %Poids d'un moteur [lbf]
  Wpropeller=15560    
  Wpropulsion=3351
  WeightPropSyst=(WeightEngine+Wpropeller+Wpropulsion)/4            %Only 1 unit
  RadiusMotor=8.75;        %Diamètre des hélices
+=======
+ Dfuselage=15.08;        %DiamÃ¨tre du fuselage
+ WeightMotor=971;         %Poids d'un moteur [lbf]
+ RadiusMotor=8.75;        %DiamÃ¨tre des hÃ©lices
+>>>>>>> 8ce3b530704595320c5dba60e0ced307386acb47
  yMotor1=1*RadiusMotor+Dfuselage/2;
  yMotor2=3*RadiusMotor+Dfuselage/2;
  
@@ -67,16 +73,16 @@
 
 %%%%%%%% Substracting the sutructure weight and the fuel weight%%%%%
 
- %Poids linéaire de la structure
+ %Poids linÃ©aire de la structure
  PoidsL = zeros(1,m);
  for g = 1:1:m
      PoidsL(1,g) = -2*nUltPos*Wwing/b/(Ct+Cr)*(2*(Ct-Cr)/b*y(1,g) + Cr);
  end
  
-  %Poids linéaire de l'essence
+  %Poids linÃ©aire de l'essence
   FuelW = zeros(1,m);
   for h = 1:1:m
-      if (y(1,h)>8.5) && (y(1,h)<52)      %La valeur minimale est supposé 1ft après le diamètre 
+      if (y(1,h)>8.5) && (y(1,h)<52)      %La valeur minimale est supposÃ© 1ft aprÃ¨s le diamÃ¨tre 
                                           %et la valeur maximale 6ft avant le bout d'aile
       FuelW(1,h) = -2*nUltPos*Wfuel/b/(Ct+Cr)*(2*(Ct-Cr)/b*y(1,h) + Cr);
       else
@@ -141,10 +147,15 @@ Moment = zeros(1,m);
  xlabel('Wing Station,y [ft]')
  ylabel('Wing Shear Force, [lb_f]')
  text(0, ShearForce(1,1),'\leftarrow V_z at wing root = ')
- 
+
  figure(3)
-  plot(y, Moment)
+  plot(y, Moment, 'k')
   hold on
-   grid minor
+   grid on
  xlabel('Wing Span ,y [ft]')
+<<<<<<< HEAD
  ylabel('Moment, [lb_f] ft')
+=======
+ ylabel('Moment, [lb_f ft]')
+ text(0, Moment(1,1),'\leftarrow M_x at wing root = ')
+>>>>>>> 8ce3b530704595320c5dba60e0ced307386acb47
