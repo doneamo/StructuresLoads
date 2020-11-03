@@ -143,7 +143,7 @@ Moment = zeros(1,m);
   grid on
  xlabel('Wing Station,y [ft]')
  ylabel('Wing Shear Force, [lb_f]')
- text(0, ShearForce(1,1),'\leftarrow V_z at wing root = ')
+ text(0, ShearForce(1,1),'\leftarrow V_z at wing root')
 
  figure(3)
   plot(y, Moment, 'k')
@@ -152,5 +152,5 @@ Moment = zeros(1,m);
  xlabel('Wing Span ,y [ft]')
  ylabel('Moment, [lb_f] ft')
  ylabel('Moment, [lb_f ft]')
- text(0, Moment(1,1),'\leftarrow M_x at wing root = ')
+ text(0, Moment(1,1),'\leftarrow M_x at wing root')
 
