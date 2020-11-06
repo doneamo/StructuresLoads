@@ -1,10 +1,10 @@
 
  m = 591;                %Nombre de point de donné
- Cr=17.15;               %Corde à l'emplenture [ft]
- Ct=10.3;                %Corde au bout d'aile [ft]
+ Cr=16.85;               %Corde à l'emplenture [ft]
+ Ct=10.11;                %Corde au bout d'aile [ft]
  nUltPos=3.25*1.5;           %Facteur de chargement limite positif
  b=118;                  %Envergure [ft]
- W=121904;               %Poids [lbf]
+ W=121893;               %Poids [lbf]
  Wwing=7776/2;              %Poids de une aile [lbf]  
  Wfuel=27162.5;           %Poids du gaz pour une aile [lbf]
  Dfuselage=15.08;           %Diam�tre du fuselage
@@ -16,9 +16,11 @@
  Dfuselage=15.08;        %Diamètre du fuselage
  WeightMotor=971;         %Poids d'un moteur [lbf]
  RadiusMotor=8.75;        %Diamètre des hélices
- yMotor1=1*RadiusMotor+Dfuselage/2+1;
- yMotor2=3*RadiusMotor+Dfuselage/2+2;
- 
+ yMotor1=0.5*Dfuselage+19.25
+ yMotor2=0.5*Dfuselage+45.5
+ CT=0.4
+ AC=0.25
+ GazLine=(0.6-0.15)/2+0.15
  %Matrice de l'envergure
  y = zeros(1,m);
  for i = 1:1:m
@@ -71,9 +73,9 @@
 %%%%%%%% Substracting the sutructure weight and the fuel weight%%%%%
 
  %Poids linéaire de la structure
- PoidsL = zeros(1,m);
+ WeightS = zeros(1,m);
  for g = 1:1:m
-     PoidsL(1,g) = -2*nUltPos*Wwing/b/(Ct+Cr)*(2*(Ct-Cr)/b*y(1,g) + Cr);
+     WeightS(1,g) = -2*nUltPos*Wwing/b/(Ct+Cr)*(2*(Ct-Cr)/b*y(1,g) + Cr);
  end
  
   %Poids linéaire de l'essence
@@ -92,7 +94,7 @@
 
  TrueLinearShearForce = zeros(1,m);
  for o = 1:1:m
-     TrueLinearShearForce(1,o) = L(1,o)+PoidsL(1,o)+FuelW(1,o);
+     TrueLinearShearForce(1,o) = L(1,o)+WeightS(1,o)+FuelW(1,o);
  end
  
  %%%%%%%%%%% Shear Stress and Moment equations %%%%%%%%%%%%%%%%
@@ -101,23 +103,43 @@
  for p = m-1:-1:1
      ShearForce(1,p) = TrueLinearShearForce(1,p)*b/2/(m-1)+ShearForce(1,p+1);
      if round(yMotor1,1)==y(1,p)
-         ShearForce(1,p)=ShearForce(1,p)-2*WeightPropSyst*nUltPos;
+         ShearForce(1,p)=ShearForce(1,p)-WeightPropSyst*nUltPos;
      elseif round(yMotor2,1)==y(1,p)
-         ShearForce(1,p)=ShearForce(1,p)-2*WeightPropSyst*nUltPos;
+         ShearForce(1,p)=ShearForce(1,p)-WeightPropSyst*nUltPos;
      end
  end
  
-Moment = zeros(1,m);
+Momentx = zeros(1,m);
  for q = m-1:-1:1
-     Moment(1,q) = -ShearForce(1,q)*b/2/(m-1)+ Moment(1,q+1);
+     Momentx(1,q) = -ShearForce(1,q)*b/2/(m-1)+ Momentx(1,q+1);
+ end
+ Vmax=max(ShearForce)
+ Mmax=min(Momentx)
+ 
+ 
+ 
+ %%%%%%%%%%%%%%%%%% Torsion par rapport au centre de torsion%%%%%%%%%%%%
+ 
+ Corde=zeros(1,m);
+ torsionlinear=zeros(1,m);
+ for u = 1:1:m
+    Corde(1,u)=Cr*(1-(1-0.6)*2*y(1,u)/b);
+    torsionlinear(1,u)=((0.25-0.4)*L(1,u)+(0.375-0.4)*FuelW(1,u)+(0.35-0.4)*WeightS(1,u))*Corde(1,u);
+ end
+
+    MomentY=zeros(1,m);
+for q = m-1:-1:1
+    MomentY(1,q) = torsionlinear(1,q)*b/2/(m-1)+ MomentY(1,q+1);
  end
  
+ 
+    
  
  %%%%%%%%%%%%%%%%% Plotting section %%%%%%%%%%%%%%%%
  figure(1)
   plot(y,L,'k-+', 'MarkerIndices', 5:80:length(L)) %lift distribution
   hold on
-  plot(y,PoidsL, 'k-o', 'MarkerIndices', 5:80:length(PoidsL)) %Wing Weight
+  plot(y,WeightS, 'k-o', 'MarkerIndices', 5:80:length(WeightS)) %Wing Weight
   hold on
   plot(y,FuelW, 'k-^', 'MarkerIndices', 5:80:length(FuelW)) %Fuel Weight
   hold on
@@ -136,7 +158,6 @@ Moment = zeros(1,m);
  ylabel('Wing Loading, [lb_f/ft]')
  legend('Lift Distribution', 'Wing Weight', 'Fuel Weight', 'Total Wing Loading')
  
- 
  figure(2)
   plot(y, ShearForce, 'k')
   hold on
@@ -146,11 +167,19 @@ Moment = zeros(1,m);
  text(0, ShearForce(1,1),'\leftarrow V_z at wing root = ')
 
  figure(3)
-  plot(y, Moment, 'k')
-  hold on
-   grid on
+plot(y, Momentx, 'k')
+hold on
+grid on
  xlabel('Wing Span ,y [ft]')
  ylabel('Moment, [lb_f] ft')
  ylabel('Moment, [lb_f ft]')
- text(0, Moment(1,1),'\leftarrow M_x at wing root = ')
-
+ text(0, Momentx(1,1),'\leftarrow M_x at wing root =')
+ 
+  figure(4)
+plot(y, MomentY, 'k')
+hold on
+grid on
+ xlabel('Wing Span ,y [ft]')
+ ylabel('Moment, [lb_f] ft')
+ ylabel('Moment, [lb_f ft]')
+ text(0, Momentx(1,1),'\leftarrow M_x at wing root =')
