@@ -5,15 +5,15 @@
 % strucutres, as well as weight vs thickness depending on material type
 
 %variables
-minT = 0.05; %min thickness considered, in
-maxT = 0.25; %max thickness considered, in
-increment = 0.01; %increment between each thickness considered, in
+minT = 1; %min thickness considered, in
+maxT = 2; %max thickness considered, in
+increment = 0.1; %increment between each thickness considered, in
 maxHeight = 13.77; %max allowable height of spar, in
 maxWidth = 9.5; %max allowable width of spar, in
 yC = maxHeight/2; %centroid loc in y axis
-density = 0.101; %lbf/in^3
-Mx = 988723 * 1.5; %bending moment at root
-critStress = 78; %crtical stress based on material, ksi
+density = 0.16; %lbf/in^3
+Mx = 3.12e7; %bending moment at root, lbf in
+critStress = 134; %crtical stress based on material, ksi
 
 size = 0; %size of array
 
