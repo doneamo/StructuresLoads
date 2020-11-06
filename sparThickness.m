@@ -13,25 +13,26 @@ maxWidth = 9.5; %max allowable width of spar, in
 yC = maxHeight/2; %centroid loc in y axis
 Mx = 988723*1.5; %3.12e7; %bending moment at root, lbf in
 
-%material variables
-density = 0.101; %lbf/in^3
-critStress = 78; %crtical stress based on material, ksi
-
-size = 0; %size of array
-
+size = 0; %size of datapoints
 %determie size of array based on how many data points
 for i = minT:increment:maxT
    size = size+1; 
 end
 
+%material data arrays
+density = [0.101 0.16]; %lbf/in^3
+critStress = [78 134]; %crtical stress based on material, ksi
+numOfMat = 2; %number of materials
+
+
 %create arrays for data
 thickness = minT:increment:maxT; %x axis, thickness
 appStressI = zeros(1,size); %I beam
 appStressB = zeros(1,size); %box beam
-MSI = zeros(1,size); %y axis of fig 1, safety margin of I beam
-MSB = zeros(1,size); %box beam
-weightI = zeros(1,size); %weight based on material of I beam
-weightB = zeros(1,size); %box beam
+MSI = zeros(numOfMat,size); %y axis of fig 1, safety margin of I beam
+MSB = zeros(numOfMat,size); %box beam
+weightI = zeros(numOfMat,size); %weight based on material of I beam
+weightB = zeros(numOfMat,size); %box beam
 
 %calc MS
 counter = 0;
@@ -41,22 +42,27 @@ for t = minT:increment:maxT
     %calc Iz
     Iz_Ibeam = IBeamIz(t, 2*t, maxWidth, maxHeight);
     Iz_Bbeam = BoxBeamIz(t, 2*t, maxWidth, maxHeight);
-    
+
     %calc volume based on density of material
     vol_IBeam = IBeamVol(t, 2*t, maxWidth, maxHeight);
     vol_BBeam = BoxBeamVol(t, 2*t, maxWidth, maxHeight);
-    
+
     %calc applied stress
     appStressI(1,counter) = Mx*yC / Iz_Ibeam /1000; %ksi
     appStressB(1,counter) = Mx*yC / Iz_Bbeam /1000; %ksi
-    
-    %calc weight based on material -----
-    weightI(1,counter) = density * vol_IBeam;
-    weightB(1,counter) = density * vol_BBeam;
-    
-    %calc the margin of safety based on material ----
-    MSI(1,counter) = critStress/appStressI(1,counter) - 1;
-    MSB(1,counter) = critStress/appStressB(1,counter) - 1;
+
+    %run through all different materials
+    for j = 1:1:numOfMat
+
+        %calc weight based on material -----
+        weightI(j,counter) = density(1,j) * vol_IBeam;
+        weightB(j,counter) = density(1,j) * vol_BBeam;
+
+        %calc the margin of safety based on material ----
+        MSI(j,counter) = critStress(1,j)/appStressI(1,counter) - 1;
+        MSB(j,counter) = critStress(1,j)/appStressB(1,counter) - 1;
+
+    end
     
 end
 
@@ -64,22 +70,27 @@ end
 
 %MS vs thickness
 figure(1)
-plot(thickness, MSI,'k^-', 'MarkerIndices', 2:2:length(MSI)) %I beam
+plot(thickness, MSI, 'MarkerIndices', 2:2:length(MSI)) %I beam
 grid on
-hold on
-plot(thickness, MSB,'ko-', 'MarkerIndices', 2:2:length(MSB)) %box beam
 xlabel('Thickness [in]')
 ylabel('Margin of Safety')
-legend('I-beam', 'Box Beam', 'Location', 'NorthWest')
 
 figure(2)
-plot(thickness, weightI,'k^-', 'MarkerIndices', 2:2:length(weightI)) %thickness vs weight
+plot(thickness, MSB, 'MarkerIndices', 2:2:length(MSB)) %box beam
 grid on
-hold on
-plot(thickness, weightB,'ko-', 'MarkerIndices', 2:2:length(weightB))
+xlabel('Thickness [in]')
+ylabel('Margin of Safety')
+%legend('I-beam', 'Box Beam', 'Location', 'NorthWest')
+
+figure(3)
+plot(thickness, weightI, 'MarkerIndices', 2:2:length(weightI)) %thickness vs weight
+grid on
+
+figure(4)
+plot(thickness, weightB, 'MarkerIndices', 2:2:length(weightB))
 xlabel('Thickness [in]')
 ylabel('Weight [lb_f/in]')
-legend('I-beam', 'Box Beam','Location', 'NorthWest')
+%legend('I-beam', 'Box Beam','Location', 'NorthWest')
 
 %%%%%%%%%%%%%%%%%%%%%%%% FUNCTIONS
 
