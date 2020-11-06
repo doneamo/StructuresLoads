@@ -11,8 +11,8 @@ increment = 0.1; %increment between each thickness considered, in
 maxHeight = 13.77; %max allowable height of spar, in
 maxWidth = 9.5; %max allowable width of spar, in
 yC = maxHeight/2; %centroid loc in y axis
-density = 0.16; %lbf/in^3
 Mx = 3.12e7; %bending moment at root, lbf in
+density = 0.16; %lbf/in^3
 critStress = 134; %crtical stress based on material, ksi
 
 size = 0; %size of array
