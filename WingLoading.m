@@ -164,7 +164,7 @@ for q = m-1:-1:1
   grid on
  xlabel('Wing Station,y [ft]')
  ylabel('Wing Shear Force, [lb_f]')
- text(0, ShearForce(1,1),'\leftarrow V_z at wing root = ')
+ text(0, ShearForce(1,1),'\leftarrow V_z at wing root')
 
  figure(3)
 plot(y, Momentx, 'k')
@@ -173,6 +173,7 @@ grid on
  xlabel('Wing Span ,y [ft]')
  ylabel('Moment, [lb_f] ft')
  ylabel('Moment, [lb_f ft]')
+<<<<<<< HEAD
  text(0, Momentx(1,1),'\leftarrow M_x at wing root =')
  
   figure(4)
@@ -183,3 +184,7 @@ grid on
  ylabel('Moment, [lb_f] ft')
  ylabel('Moment, [lb_f ft]')
  text(0, Momentx(1,1),'\leftarrow M_x at wing root =')
+=======
+ text(0, Moment(1,1),'\leftarrow M_x at wing root')
+
+>>>>>>> d71c7edf91badbaae85034c3820030940a0bef19
