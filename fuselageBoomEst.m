@@ -7,19 +7,11 @@
 % Number of booms must be in multiples of 4, with booms at the lines of
 % symmetry, evenly spaced in between. Assumes symmetrical cross section.
 
-
-function [] = fuselageBoomEst()
-
-    area = fuselageBoomEstMethod (4e6, 7.5, 50, 8);
-    fprintf("area is " + area + "\n");
-    
-end
-
 %removes all new line characters and replaces them with a space
 %My in ft x lbf
 %r_ft radius in ft
 %F_case in ksi
-function [area] = fuselageBoomEstMethod (My, r_ft, F_case, numBooms)
+function [area] = fuselageBoomEst (My, r_ft, F_case, numBooms)
 
     %determine theta as the smallest angle in deg from horizontal
     theta = 90/(numBooms/4); %degrees
@@ -36,17 +28,16 @@ function [area] = fuselageBoomEstMethod (My, r_ft, F_case, numBooms)
     
     z
     
-    fprintf("numBooms is " + numBooms + "\n");
-    
+    %square locations
     zSqr = z.^2;
     zSqr
     
     zTotal = sum(zSqr);
-    zTotal_ft = zTotal/12;
+    zTotal
     
-    F_ft = F_case*1000*144; %converts to lbf/ft^2
+    %F_ft = F_case*1000*144; %converts to lbf/ft^2
     
-    area = ((My * r_ft)/(F_ft * zTotal_ft))*144; %in^2
+    area = (((My*12) * r_in)/(F_case*1000 * zTotal)); %in^2
 
 end
 
