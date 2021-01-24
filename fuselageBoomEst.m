@@ -3,64 +3,50 @@
 % Date: Jan. 21, 2021
 
 % Description: Calculates the required boom area based on number of booms.
+% Only for circular fuselages.
 % Number of booms must be in multiples of 4, with booms at the lines of
 % symmetry, evenly spaced in between. Assumes symmetrical cross section.
 
+
+function [] = fuselageBoomEst()
+
+    area = fuselageBoomEstMethod (4e6, 7.5, 50, 8);
+    fprintf("area is " + area + "\n");
+    
+end
+
 %removes all new line characters and replaces them with a space
-function [area] = fuselageBoomEst (My, r, F_case, numBooms)
+%My in ft x lbf
+%r_ft radius in ft
+%F_case in ksi
+function [area] = fuselageBoomEstMethod (My, r_ft, F_case, numBooms)
 
     %determine theta as the smallest angle in deg from horizontal
     theta = 90/(numBooms/4); %degrees
+    fprintf("theta is " + theta + "\n");
     
-    %get locations of each boom from horizontal to 90 deg (upper right
-    %corner)
-    numBoomsCorner = numBooms/4 + 1;
-    zCorner = zeros(1, numBoomsCorner);
+    r_in = r_ft*12; %convert to inches
+    fprintf("r is " + r_in + "\n");
+    
+    %get locations of each boom from horizontal 
     z = zeros(1, numBooms);
-    
-    zCorner(1) = 0;
-    for i = 1:1:numBoomsCorner
-        zCorner(i + 1) = r*sind(i * theta);
-        z(1+i) = r*sind(i * theta);
+    for i = 1:1:(numBooms-1)
+        z(1+i) = r_in*sind(i * theta);
     end
     
-    %fill location for rest of booms
-    %upper left corner
-    i = numBoomsCorner + (numBoomsCorner-1);
-    westPt = i;
-    counter = 1;
-    while(i > numBoomsCorner)
-        z(i) = zCorner(counter);
-        i = i-1;
-        counter = counter + 1;
-    end
+    z
     
-    %bottom left corner
-    i = westPt;
-    counter = 1;
-    while(i <= numBoomsCorner)
-        i = i+1;
-        counter = counter + 1;
-        z(i) = zCorner(counter);
-    end
+    fprintf("numBooms is " + numBooms + "\n");
     
-    %bottom right corner
-    i = westPt + numBooms/2 - 1;
-    counter = 2;
-    while(counter <= numBoomsCorner)
-        z(i) = zCorner(counter);
-        counter = counter + 1;
-    end
-    
-    %square the z locs
-    zSqr = zeros(1:numBooms);
-    for i = 1:1:numBooms
-        zSqr(i) = (z(i))^2;
-    end
+    zSqr = z.^2;
+    zSqr
     
     zTotal = sum(zSqr);
+    zTotal_ft = zTotal/12;
     
-    area = (My * r)/(F_case * zTotal);
+    F_ft = F_case*1000*144; %converts to lbf/ft^2
+    
+    area = ((My * r_ft)/(F_ft * zTotal_ft))*144; %in^2
 
 end
 
