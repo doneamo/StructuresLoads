@@ -8,7 +8,7 @@
 % symmetry, evenly spaced in between. Assumes symmetrical cross section.
 
 %removes all new line characters and replaces them with a space
-%My in ft x lbf
+%My in ft lbf
 %r_ft radius in ft
 %F_case in ksi
 function [area] = fuselageBoomEst (My, r_ft, F_case, numBooms)
@@ -18,7 +18,7 @@ function [area] = fuselageBoomEst (My, r_ft, F_case, numBooms)
     fprintf("theta is " + theta + "\n");
     
     r_in = r_ft*12; %convert to inches
-    fprintf("r is " + r_in + "\n");
+    fprintf("r inches is " + r_in + "\n");
     
     %get locations of each boom from horizontal 
     z = zeros(1, numBooms);
@@ -26,14 +26,10 @@ function [area] = fuselageBoomEst (My, r_ft, F_case, numBooms)
         z(1+i) = r_in*sind(i * theta);
     end
     
-    z
-    
     %square locations
     zSqr = z.^2;
-    zSqr
     
     zTotal = sum(zSqr);
-    zTotal
     
     %F_ft = F_case*1000*144; %converts to lbf/ft^2
     
