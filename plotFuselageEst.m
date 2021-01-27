@@ -1,7 +1,7 @@
 %calls fuselage boom estimate function and plots it
 
 %varaibles
-My = 4e6; %lbf ft
+My = 4200000; %lbf ft
 r = 7.5; %ft
 Fty = 50; %ksi
 testCases = 10;
