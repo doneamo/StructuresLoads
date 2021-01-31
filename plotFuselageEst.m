@@ -1,11 +1,11 @@
 %calls fuselage boom estimate function and plots it
 
 %varaibles
-My = 4200000; %lbf ft
-r = 7.5; %ft
-Fty = 50; %ksi
+My = 2290000; %lbf ft
+r = 7.7; %ft,avg of inner and outer
+Ftu = 68; %ksi
 testCases = 10;
-density = 0.1; %lb/in^3, density of material
+density = 0.097; %lb/in^3, density of material
 
 numBooms = zeros(1,testCases);
 areas = zeros(1,testCases);
@@ -17,7 +17,7 @@ for i = 1:1:testCases
 end
 
 for i = 1:1:testCases
-    areas(i) = fuselageBoomEst(My,r,Fty,numBooms(i)); %in^2
+    areas(i) = fuselageBoomEst(My,r,Ftu,numBooms(i)); %in^2
     
     %calc total weight req
     weight(i) = density*areas(i); %lb/in
