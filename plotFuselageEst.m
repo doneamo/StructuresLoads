@@ -23,7 +23,6 @@ for i = 1:1:testCases
     weight(i) = density*areas(i); %lb/in
 end
 
-
 %graph
 figure(1)
 plot(numBooms, areas, 'k')
@@ -38,5 +37,8 @@ hold on
 grid on
 xlabel('Number of Booms')
 ylabel('Weight Per Boom, [lb_f/in]')
+
+%calc thickness %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% not done!!!
+thickness = skinThicknessEst(z, theta, r, A_eq, A_max, A_min);
 
 
