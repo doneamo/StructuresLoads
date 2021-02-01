@@ -2,8 +2,8 @@
 
 %varaibles
 My = 2290000; %lbf ft
-r = 7.7; %ft,avg of inner and outer
-Ftu = 68; %ksi
+r = 15.833/2; %ft,avg of inner and outer
+Ft = 62; %ksi
 testCases = 10;
 density = 0.097; %lb/in^3, density of material
 
@@ -17,7 +17,7 @@ for i = 1:1:testCases
 end
 
 for i = 1:1:testCases
-    areas(i) = fuselageBoomEst(My,r,Ftu,numBooms(i)); %in^2
+    areas(i) = fuselageBoomEst(My,r,Ft,numBooms(i)); %in^2
     
     %calc total weight req
     weight(i) = density*areas(i); %lb/in
