@@ -38,7 +38,7 @@ grid on
 xlabel('Number of Booms')
 ylabel('Weight Per Boom, [lb_f/in]')
 
-%calc thickness %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% not done!!!
+%calc thickness %%%%%%%%%%%%%%%%%%%%%%%%%%% not done!!!
 thickness = skinThicknessEst(z, theta, r, A_eq, A_max, A_min);
 
 
