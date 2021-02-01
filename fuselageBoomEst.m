@@ -10,12 +10,10 @@
 %My in ft lbf
 %r_ft radius in ft
 %F_case in ksi
-function [area] = fuselageBoomEst (My, r_ft, F_case, numBooms)
+function [area,locs,angle] = fuselageBoomEst (My, r_ft, F_case, numBooms)
 
     %determine theta as the smallest angle in deg from horizontal
     theta = 90/(numBooms/4); %degrees
-    numBooms
-    theta
     
     r_in = r_ft*12; %convert to inches
     
@@ -25,8 +23,6 @@ function [area] = fuselageBoomEst (My, r_ft, F_case, numBooms)
         z(1+i) = r_in*sind(i * theta);
     end
     
-    z
-    
     %square locations
     zSqr = z.^2;
     
@@ -35,6 +31,7 @@ function [area] = fuselageBoomEst (My, r_ft, F_case, numBooms)
     %F_ft = F_case*1000*144; %converts to lbf/ft^2
     
     area = (((My*12) * r_in)/(F_case*1000 * zTotal)); %in^2
-
+    locs = z;
+    angle = theta;
 end
 
