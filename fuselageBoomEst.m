@@ -15,16 +15,18 @@ function [area] = fuselageBoomEst (My, r_ft, F_case, numBooms)
 
     %determine theta as the smallest angle in deg from horizontal
     theta = 90/(numBooms/4); %degrees
-    fprintf("theta is " + theta + "\n");
+    numBooms
+    theta
     
     r_in = r_ft*12; %convert to inches
-    fprintf("r inches is " + r_in + "\n");
     
     %get locations of each boom from horizontal 
     z = zeros(1, numBooms);
     for i = 1:1:(numBooms-1)
         z(1+i) = r_in*sind(i * theta);
     end
+    
+    z
     
     %square locations
     zSqr = z.^2;
