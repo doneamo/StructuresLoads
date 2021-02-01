@@ -7,7 +7,6 @@
 % Number of booms must be in multiples of 4, with booms at the lines of
 % symmetry, evenly spaced in between. Assumes symmetrical cross section.
 
-%removes all new line characters and replaces them with a space
 %My in ft lbf
 %r_ft radius in ft
 %F_case in ksi
