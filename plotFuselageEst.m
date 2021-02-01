@@ -38,7 +38,22 @@ grid on
 xlabel('Number of Booms')
 ylabel('Weight Per Boom, [lb_f/in]')
 
-%calc thickness %%%%%%%%%%%%%%%%%%%%%%%%%%% not done!!!
-thickness = skinThicknessEst(z, theta, r, A_eq, A_max, A_min);
+%=========================================================================
+
+%calc thickness for selected num of booms
+booms = 8;
+[area,z,theta] = fuselageBoomEst (My, r, Ft, booms);
+areaArrayPos = booms/4;
+A_max = areas(areaArrayPos); %area with 8 booms
+A_min = areas(areaArrayPos+1); %area with 12 booms
+[thickness, areaSt] = skinThicknessEst(z, theta, r, area, A_max, A_min);
+
+%plot thickness cruve
+figure(3)
+plot(thickness,areaSt, 'k-');
+hold on
+grid on
+xlabel('Skin Thickness, [in]')
+ylabel('Area of Stiffeners, [in^2]')
 
 
