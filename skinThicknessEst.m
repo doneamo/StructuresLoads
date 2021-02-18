@@ -4,7 +4,7 @@
 % z: vector of boom loctions in inches from horizontal centreline
 % theta: angle between cloest two booms
 
-function [t,A_st] = skinThicknessEst(z, theta, r, A_eq, A_max, A_min)
+function [t,A_st,b] = skinThicknessEst(z, theta, r, A_eq, A_max, A_min)
     b = r * deg2rad(theta); %arc length between booms
     r
     b
