@@ -4,7 +4,7 @@
 % b in inches
 % Aeq in in^2
 
-function [Ast] = AreaByThickness(t,b,z,Aeq)
-    Ast = Aeq - ((t*b)/6)*(4 + z(3)/z(2) + z(1)/z(2));
+function [TotalArea] = AreaByThickness(t,b,z)
+    TotalArea = ((t*b)/6)*(4 + z(3)/z(2) + z(1)/z(2));
 end
 
