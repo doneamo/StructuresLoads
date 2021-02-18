@@ -33,16 +33,16 @@ ylabel('Surface des Booms, [in^2]')%area of booms
 % str = {'Matériel: 2198-T8','F_{ty} = 62ksi'};
 % text(20,2,str)
     
-figure(2)
-plot(numBooms, weight, 'k');
-grid on
-xlabel('Number of Booms')
-ylabel('Weight Per Boom, [lb_f/in]')
+% figure(2)
+% plot(numBooms, weight, 'k');
+% grid on
+% xlabel('Number of Booms')
+% ylabel('Weight Per Boom, [lb_f/in]')
 
 %=========================================================================
 
 %calc thickness for selected num of booms
-booms = 120;
+booms = 48;
 r_in = r *12;
 [area,z,theta] = fuselageBoomEst (My, r, Ft, booms);
 areaArrayPos = booms/4;
@@ -61,8 +61,8 @@ ylabel('Area of Stiffeners , [in^2]') %area of stiffeners
 
 %calc area of stringer based on thickness req
 tReq = 0.01896; %in
-Aeq = area; %in^2
-AstByT = AstByThickness(tReq,b,z,Aeq);
+Aeq = area %in^2
+AstByT = AstByThickness(tReq,b,z,Aeq)
 
 %========================================================================
 
