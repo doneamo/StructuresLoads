@@ -24,12 +24,12 @@ for i = 1:1:testCases
     weight(i) = density*areas(i); %lb/in
 end
 
-%graph
-figure(1)
-plot(numBooms, areas, 'k')
-grid on
-xlabel('Nombre de Booms') %number of booms
-ylabel('Surface des Booms, [in^2]')%area of booms
+% %graph
+% figure(1)
+% plot(numBooms, areas, 'k')
+% grid on
+% xlabel('Nombre de Booms') %number of booms
+% ylabel('Surface des Booms, [in^2]')%area of booms
 % str = {'Matériel: 2198-T8','F_{ty} = 62ksi'};
 % text(20,2,str)
     
@@ -42,7 +42,7 @@ ylabel('Surface des Booms, [in^2]')%area of booms
 %=========================================================================
 
 %calc thickness for selected num of booms
-booms = 48;
+booms = 60;
 r_in = r *12;
 [area,z,theta] = fuselageBoomEst (My, r, Ft, booms);
 areaArrayPos = booms/4;
@@ -50,20 +50,44 @@ A_max = areas(areaArrayPos); %boom area with 8 booms -> depends on booms
 A_min = areas(areaArrayPos+1); %boom area with 12 booms
 [thickness, areaSt, b] = skinThicknessEst(z, theta, r_in, area, A_max, A_min);
 
-%plot thickness cruve
-figure(3)
-plot(thickness,areaSt, 'k-');
-grid on
-% xlabel('Épaisseur du Revêtement, [in]') %skin thickness
-% ylabel('Surface des Raidisseurs , [in^2]') %area of stiffeners
-xlabel('Skin Thickness, [in]') %skin thickness
-ylabel('Area of Stiffeners , [in^2]') %area of stiffeners
-
-%calc area of stringer based on thickness req
-tReq = 0.01896; %in
-Aeq = area %in^2
-AstByT = AstByThickness(tReq,b,z,Aeq)
+% %plot thickness cruve
+% figure(3)
+% plot(thickness,areaSt, 'k-');
+% grid on
+% % xlabel('Épaisseur du Revêtement, [in]') %skin thickness
+% % ylabel('Surface des Raidisseurs , [in^2]') %area of stiffeners
+% xlabel('Skin Thickness, [in]') %skin thickness
+% ylabel('Area of Stiffeners , [in^2]') %area of stiffeners
+%====================== Concluded the boom area calced before was not large
+%enough, for both stringer and skin
 
 %========================================================================
+%calc area of stringer based on thickness req
+tReq = 0.01896; %in
+Aeq_Ast = AreaByThickness(tReq,b,z);
+Ast = area;
+Aeq = Ast + Aeq_Ast;
+
+%moment of inertia calc
+rOut = r_in;
+rIn = rOut - tReq;
+Iy_web = (pi/4)*(rOut^4 - rIn^4);
+
+zSqr = z.^2;
+dzSqrTotal = sum(zSqr);
+Iy_boom = Ast*dzSqrTotal;
+
+%Iy = Iy_web + Iy_boom;
+
+% moment of inertia using new Aeq, idealized
+Iy = Aeq*dzSqrTotal;
+
+% calc shear flow
+Vz = 126000;
+[q,tau] = shearFlow(Vz,Iy,Aeq,z,booms,tReq);
+
+
+
+
 
 
