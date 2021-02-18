@@ -6,7 +6,6 @@
 
 function [t,A_st,b] = skinThicknessEst(z, theta, r, A_eq, A_max, A_min)
     b = r * deg2rad(theta); %arc length between booms
-    r
     b
     A_count = A_min;
     numElements = 0;
