@@ -1,8 +1,9 @@
 % calculate shearflow based on idealized fuselage cross section 
 % Vy = 0, Iyz = 0
 % negative indicates counter-clockwise moment
-% Vz in lbf, Iy in in^4, A in in^2, z in inches
-function [q,tau] = shearFlow(Vz,Iy,A,z,numBooms,t)
+% Vz in lbf, Iy in in^4, A in in^2, z in inches, r in inches
+% T_ft in ft lbf
+function [q,tau] = shearFlow(Vz,Iy,A,z,numBooms,t,r,T_ft)
 
     %calc qb
     qb = zeros(1,numBooms);
@@ -26,9 +27,21 @@ function [q,tau] = shearFlow(Vz,Iy,A,z,numBooms,t)
     qso = (Mv - Mqb_total)/(2*A); %lb/in
     
     %calc total qs -> q
-    q = zeros(1,numBooms);
+    qs = zeros(1,numBooms);
     for i= 1:1:numBooms
-        q(i) = qb(i) + qso; %lb/in
+        qs(i) = qb(i) + qso; %lb/in
+    end
+    
+    %calc shear flow due to torsion
+    A_fuselage = pi*r^2; %in^2
+    T_in = T_ft * 12; %in lbf
+    qt = T_in/(2*A_fuselage);
+    
+    %calc final total shear flow
+    %assumes torsion comes from left landing gear by pilot's POV
+    q = zeros(1,numBooms);
+    for i = 1:1:numBooms
+        q(i) = qs(i) + qt;
     end
     
     maxq = max(q); %lb/in
