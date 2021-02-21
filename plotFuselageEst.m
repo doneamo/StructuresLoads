@@ -1,12 +1,14 @@
-%calls fuselage boom estimate function and plots it
-
-%varaibles
+%varaibles =========================================================
 %My = 2290000; %lbf ft ultimate load case
 My = 1709000; %lbf ft limit load case
+T = 1274000; %ft lbf
+Vz = 126000; %lbf
 r = 15.833/2; %ft,avg of inner and outer
 Ft = 62; %ksi
 testCases = 80;
 density = 0.097; %lb/in^3, density of material
+
+% Inital boom area estimate ========================================
 
 numBooms = zeros(1,testCases);
 areas = zeros(1,testCases);
@@ -39,7 +41,9 @@ end
 % xlabel('Number of Booms')
 % ylabel('Weight Per Boom, [lb_f/in]')
 
-%=========================================================================
+% =================================================================
+% Determine if thickness based on boom area simplification is enough for
+% stifferner and skin
 
 %calc thickness for selected num of booms
 booms = 60;
@@ -58,33 +62,35 @@ A_min = areas(areaArrayPos+1); %boom area with 12 booms
 % % ylabel('Surface des Raidisseurs , [in^2]') %area of stiffeners
 % xlabel('Skin Thickness, [in]') %skin thickness
 % ylabel('Area of Stiffeners , [in^2]') %area of stiffeners
-%====================== Concluded the boom area calced before was not large
+%=========== Concluded the boom area calced before was not large
 %enough, for both stringer and skin
 
-%========================================================================
-%calc area of stringer based on thickness req
+% Skin thickness analysis ==========================================
+% Stresses: hoop stress (longitudinal and circunfertial, bending moment
+% stress, torsional stress, shear stress
+
+% Calc area of stringer based on thickness req
 tReq = 0.01896; %in
 Aeq_Ast = AreaByThickness(tReq,b,z);
 Ast = area;
 Aeq = Ast + Aeq_Ast;
 
 %moment of inertia calc
-rOut = r_in;
-rIn = rOut - tReq;
-Iy_web = (pi/4)*(rOut^4 - rIn^4);
+% rOut = r_in;
+% rIn = rOut - tReq;
+% Iy_web = (pi/4)*(rOut^4 - rIn^4); %in^4
 
 zSqr = z.^2;
 dzSqrTotal = sum(zSqr);
-Iy_boom = Ast*dzSqrTotal;
+% Iy_boom = Ast*dzSqrTotal;
 
 %Iy = Iy_web + Iy_boom;
 
 % moment of inertia using new Aeq, idealized
-Iy = Aeq*dzSqrTotal;
+Iy = Aeq*dzSqrTotal; %in^4
 
 % calc shear flow
-Vz = 126000;
-[q,tau] = shearFlow(Vz,Iy,Aeq,z,booms,tReq);
+[q,tau] = shearFlow(Vz,Iy,Aeq,z,booms,tReq,r_in,T);
 
 
 
