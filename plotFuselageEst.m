@@ -75,6 +75,10 @@ Aeq_Ast = AreaByThickness(tReq,b,z);
 Ast = area;
 Aeq = Ast + Aeq_Ast;
 
+%weight per boom with equivalent area
+weightEq = Aeq * density;
+fprintf('weightEq is %f lbf/in \n', weightEq); 
+
 %moment of inertia calc
 % rOut = r_in;
 % rIn = rOut - tReq;
@@ -94,10 +98,10 @@ Iy = Aeq*dzSqrTotal; %in^4
 
 % Mohr's circle test ===================================
 % !!!!!!!!!!!!!!!! does not take into account sigma 3?
-[tau_max,thetaP,thetaTau,sigma1,sigma2] = MohrsCircle(36.5,85.6,59)
+[tau_max,thetaP,thetaTau,sigma1,sigma2] = MohrsCircle(36.5,85.6,59);
 
 % Tresca failure criterion !!!!!!!!!!!!! does not account for sigma 3
-FS = Ft/(2*tau_max)
+FS = Ft/(2*tau_max);
 
 
 
