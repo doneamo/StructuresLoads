@@ -92,7 +92,12 @@ Iy = Aeq*dzSqrTotal; %in^4
 % calc shear flow
 [q,tau] = shearFlow(Vz,Iy,Aeq,z,booms,tReq,r_in,T);
 
+% Mohr's circle test ===================================
+% !!!!!!!!!!!!!!!! does not take into account sigma 3?
+[tau_max,thetaP,thetaTau,sigma1,sigma2] = MohrsCircle(36.5,85.6,59)
 
+% Tresca failure criterion !!!!!!!!!!!!! does not account for sigma 3
+FS = Ft/(2*tau_max)
 
 
 
