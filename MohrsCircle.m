@@ -3,6 +3,7 @@
 % All inputs in ksi, except P in lbf/ft^2
 % Theta output is in degrees, positive = CW, negative = CCW as with Mohr's
 % circle convention
+% All other outputs in ksi
 
 function [tau_max,thetaP,thetaTau,sigma1,sigma2,sigma3] = MohrsCircle(tau_xy,sigma_x,sigma_y,P)
     
