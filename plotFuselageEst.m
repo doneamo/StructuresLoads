@@ -76,6 +76,7 @@ A_min = areas(areaArrayPos+1); %boom area with 12 booms
 
 % Calc area of stringer based on thickness req
 tReq = 0.01896; %in
+fprintf('skin thickness is %f in \n', tReq);
 Aeq_Ast = AreaByThickness(tReq,b,z);
 Ast = area;
 Aeq = Ast + Aeq_Ast;
