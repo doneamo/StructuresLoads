@@ -45,6 +45,6 @@ function [q,tau] = shearFlow(Vz,Iy,A,z,numBooms,t,r,T_ft)
     end
     
     maxq = max(q); %lb/in
-    tau = maxq/t; %lb/in^2
+    tau = maxq/t/1000; %ksi
 end
 
