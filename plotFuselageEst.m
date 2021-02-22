@@ -1,8 +1,8 @@
 %varaibles =========================================================
 %My = 2290000; %lbf ft ultimate load case
-My = 1709000; %lbf ft limit load case
+My = 3566900; %lbf ft limit load case
 T = 1274000; %ft lbf
-Vz = 126000; %lbf
+Vz = 188700; %lbf
 r = 15.833/2; %ft,avg of inner and outer
 Ft = 62; %ksi
 testCases = 80;
@@ -49,7 +49,7 @@ end
 % stifferner and skin
 
 %calc thickness for selected num of booms
-booms = 60;
+booms = 108;
 fprintf('num of booms is %d \n', booms); 
 r_in = r *12;
 [area,z,theta] = fuselageBoomEst (My, r, Ft, booms);
@@ -75,7 +75,7 @@ A_min = areas(areaArrayPos+1); %boom area with 12 booms
 
 
 % Calc area of stringer based on thickness req
-tReq = 0.01896; %in
+tReq = 0.056; %in
 fprintf('skin thickness is %f in \n', tReq);
 Aeq_Ast = AreaByThickness(tReq,b,z);
 Ast = area;
