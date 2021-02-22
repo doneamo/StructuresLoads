@@ -7,6 +7,9 @@ r = 15.833/2; %ft,avg of inner and outer
 Ft = 62; %ksi
 testCases = 80;
 density = 0.097; %lb/in^3, density of material
+internalP = 1696; %lbf/ft^2, internal pressure at 6000ft
+
+fprintf('--------------------- \n'); 
 
 % Inital boom area estimate ========================================
 
@@ -47,6 +50,7 @@ end
 
 %calc thickness for selected num of booms
 booms = 60;
+fprintf('num of booms is %d \n', booms); 
 r_in = r *12;
 [area,z,theta] = fuselageBoomEst (My, r, Ft, booms);
 areaArrayPos = booms/4;
@@ -69,11 +73,14 @@ A_min = areas(areaArrayPos+1); %boom area with 12 booms
 % Stresses: hoop stress (longitudinal and circunfertial, bending moment
 % stress, torsional stress, shear stress
 
+
 % Calc area of stringer based on thickness req
 tReq = 0.01896; %in
 Aeq_Ast = AreaByThickness(tReq,b,z);
 Ast = area;
 Aeq = Ast + Aeq_Ast;
+fprintf('Ast is %f in^2 \n', Ast); 
+fprintf('Aeq is %f in^2 \n', Aeq); 
 
 %weight per boom with equivalent area
 weightEq = Aeq * density;
@@ -93,15 +100,38 @@ dzSqrTotal = sum(zSqr);
 % moment of inertia using new Aeq, idealized
 Iy = Aeq*dzSqrTotal; %in^4
 
+% Mohr's circle calcs ===================================
+
 % calc shear flow
 [q,tau] = shearFlow(Vz,Iy,Aeq,z,booms,tReq,r_in,T);
 
-% Mohr's circle test ===================================
-% !!!!!!!!!!!!!!!! does not take into account sigma 3?
-[tau_max,thetaP,thetaTau,sigma1,sigma2] = MohrsCircle(36.5,85.6,59);
+% hoop stress, internalP in lbf/ft^2, r in ft, tReq in inches
+[sigmaH,sigmaL] = hoopStress(internalP,r,tReq);
 
-% Tresca failure criterion !!!!!!!!!!!!! does not account for sigma 3
+% stress due to bending moment
+sigmaV = bendingMomentStress(My,r_in,Iy);
+
+% define stress element
+tauxy = tau;
+sigmax = sigmaL + sigmaV;
+sigmay = sigmaH;
+fprintf('tauxy is %f ksi \n', tauxy); 
+fprintf('sigmax is %f ksi \n', sigmax); 
+fprintf('sigmay is %f ksi \n', sigmay); 
+
+% Mohr's circle
+[tau_max,thetaP,thetaTau,sigma1,sigma2,sigma3] = MohrsCircle(tauxy,sigmax,sigmay,internalP);
+
+fprintf('sigma1 is %f ksi \n', sigma1); 
+fprintf('sigma2 is %f ksi \n', sigma2); 
+fprintf('sigma3 is %f ksi \n', sigma3); 
+fprintf('tau_max is %f ksi \n', tau_max); 
+
+% Tresca failure criterion
 FS = Ft/(2*tau_max);
+fprintf('safety factor is %f \n', FS); 
+
+
 
 
 
