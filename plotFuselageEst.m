@@ -126,6 +126,8 @@ fprintf('sigmay is %f ksi \n', sigmay);
 fprintf('sigma1 is %f ksi \n', sigma1); 
 fprintf('sigma2 is %f ksi \n', sigma2); 
 fprintf('sigma3 is %f ksi \n', sigma3); 
+fprintf('thetaP is %f degrees \n', thetaP); 
+fprintf('thetaTau is %f degrees \n', thetaTau); 
 fprintf('tau_max is %f ksi \n', tau_max); 
 
 % Tresca failure criterion
