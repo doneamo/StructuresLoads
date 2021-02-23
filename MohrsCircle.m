@@ -14,12 +14,15 @@ function [tau_max,thetaP,thetaTau,sigma1,sigma2,sigma3] = MohrsCircle(tau_xy,sig
     
     sigma1 = (sigma_x + sigma_y)/2 + R12;
     sigma2 = (sigma_x + sigma_y)/2 - R12;
-    sigma3 = -P/144/1000; %ksi
+    %sigma3 = -P/144/1000; %ksi
+    sigma3 = 0; %ksi
     
     if (sigma3 <= sigma2)
         R13 = (sigma1 - sigma3)/2;
         tau_max = R13;
     else
+        sigma3 = sigma2;
+        sigma2 = 0;
         tau_max = R12;
     end
 
