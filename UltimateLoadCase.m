@@ -43,3 +43,10 @@ for i = booms/2:1:booms
     Aeff(i) = AStrUlt(i) + ((tSkin*b)/6)*(4 + z(3)/z(2) + z(1)/z(2));
 end
 
+% weight estimate
+AeffWeight = zeros(1,booms);
+for i = 1:1:booms
+    AeffWeight(i) = Aeff(i)*density; %lb/in
+end
+xSectWeight = sum(AeffWeight); %lb/in, weight in one fuselage cross section
+
