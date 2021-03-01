@@ -23,6 +23,7 @@ end
 %effectiveness factor
 est = zeros(1,booms);
 
+%area of stinger defined
 AStrUlt = zeros(1,booms);
 for i = 1:1:booms
     if (i == longLocs(1) || i == longLocs(2) || i == longLocs(3) || i == longLocs(4))
@@ -50,3 +51,36 @@ for i = 1:1:booms
 end
 xSectWeight = sum(AeffWeight); %lb/in, weight in one fuselage cross section
 
+%moment of inertia calc
+Iy_ult = 0;
+for i = 1:1:booms
+    Iy_ult = Iy_ult + Aeff(i)*zSqr(i); %in^4
+end
+
+%bending moment stress calc
+bendStress = zeros(1,booms);
+for i = 1:1:booms
+    bendStress(i) = ((My*12) * z(i))/Iy_ult; %lbf/in^2
+end
+
+%actual bending stress with effectiveness factor
+actualStress = zeros(1,booms);
+for i = 1:1:booms
+    actualStress(i) = bendStress(i) * est(i);
+end
+
+%determine allowable stress in each stiffener, compression on top
+allowStress = zeros(1,booms);
+for i = 1:1:booms
+    if i < booms/2
+        allowStress(i) = Fcy*1000; %psi
+    else
+        allowStress(i) = Ft*1000; %psi
+    end
+end
+
+%determine margin of safety
+MS = zeros(1,booms);
+for i = 1:1:booms
+    MS(i) = allowStress(i)/actualStress(i) - 1;
+end
