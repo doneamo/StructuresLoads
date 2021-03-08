@@ -1,3 +1,4 @@
+%Limit load case estimate
 %varaibles =========================================================
 %My = 2290000; %lbf ft ultimate load case
 My = 3679540; %lbf ft limit load case
