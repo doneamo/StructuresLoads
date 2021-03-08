@@ -1,9 +1,8 @@
 %Limit load case estimate
 %varaibles =========================================================
-%My = 2290000; %lbf ft ultimate load case
-My = 3679540; %lbf ft limit load case
-T = 113400; %ft lbf
-Vz = 188700; %lbf
+My = 3838870; %lbf ft limit load case
+T = 1261180; %ft lbf
+Vz = 195080; %lbf
 r = 15.833/2; %ft,avg of inner and outer
 Ft = 62; %ksi
 testCases = 80;
@@ -76,7 +75,7 @@ A_min = areas(areaArrayPos+1); %boom area with 12 booms
 
 
 % Calc area of stringer based on thickness req
-tSkin = 0.05; %in
+tSkin = 0.061; %in
 fprintf('skin thickness is %f in \n', tSkin);
 Aeq_Ast = AreaByThickness(tSkin,b,z);
 Ast = area;
