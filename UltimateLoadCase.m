@@ -1,3 +1,4 @@
+%Ultimate load case, must run limit load case first
 Fcy = 48; %ksi
 E = 10.9e3; %ksi
 tStr = 0.0571; %inches
