@@ -49,7 +49,7 @@ end
 % stifferner and skin
 
 %calc thickness for selected num of booms
-booms = 100;
+booms = 72;
 fprintf('num of booms is %d \n', booms); 
 r_in = r *12;
 [area,z,theta] = fuselageBoomEst (My, r, Ft, booms);
