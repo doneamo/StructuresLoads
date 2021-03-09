@@ -2,19 +2,39 @@
 Fcy = 48; %ksi
 Ftu = 68; %ksi
 E = 10.9e3; %ksi
-tStr = 0.05943; %inches
-B = 4.05;
-m = 0.82;
-Along = Ast*1.25; %longeron area
-tLong = tStr*1.25; %longeron thickness, inches, determined by stiffener cross section
+%tStr = 0.05943; %inches
+Ast = area - 0.1001;
+tStr = Ast/(0.125+0.6875+1+0.6875+0.125);
+Along = Ast*1; %longeron area
+tLong = tStr*1; %longeron thickness, inches, determined by stiffener cross section
 My_ult = 5810780; %ftlbf ultimate case
 
-% crippling stress of z or c formed sections
-%stringer
-sigma_cr_str = B*((1/(Ast/tStr^2))^m)*((E^m * Fcy^(3-m))^(1/3));
+%shape of stiffeners
+zFormed = false;
+jFormed = true;
 
-%longeron
-sigma_cr_long = B*((1/(Along/tLong^2))^m)*((E^m * Fcy^(3-m))^(1/3));
+if zFormed == true
+    % crippling stress of z or c formed sections
+    % stringer
+    % z and c formed
+    B = 4.05; 
+    m = 0.82;
+    sigma_cr_str = B*((1/(Ast/tStr^2))^m)*((E^m * Fcy^(3-m))^(1/3));
+    %longeron
+    sigma_cr_long = B*((1/(Along/tLong^2))^m)*((E^m * Fcy^(3-m))^(1/3));
+    fprintf('Z formed \n');
+end
+
+if jFormed == true
+    % J formed
+    B = 0.58;
+    m = 0.8;
+    % crippling stress of J formed sections
+    g = 7; % 5 flanges, 2 cuts
+    sigma_cr_str = B*((1/(Ast/(g*tStr^2)))^m)*((E^m * Fcy^(2-m))^(1/2));
+    sigma_cr_long = B*((1/(Along/(g*tLong^2)))^m)*((E^m * Fcy^(2-m))^(1/2));
+    fprintf('J formed \n');
+end
 
 %define which booms are stiffeners and longerons
 %current: four corners
@@ -54,19 +74,26 @@ end
 
 %effective area around fuselage
 Aeff = zeros(1,booms);
+Aactual = zeros(1,booms);
 for i = 1:1:booms/2
-    Aeff(i) = est(i)*(AStrUlt(i) + 1.90*tSkin^2*sqrt(E/sigma_cr_str));
+    if (i == longLocs(1) || i == longLocs(2) || i == longLocs(3) || i == longLocs(4))
+        Aeff(i) = est(i)*(AStrUlt(i) + 1.90*tSkin^2*sqrt(E/sigma_cr_long));
+    else
+        Aeff(i) = est(i)*(AStrUlt(i) + 1.90*tSkin^2*sqrt(E/sigma_cr_str));
+    end
+    Aactual(i) = Aeff(i)/est(i);
 end
 for i = booms/2+1:1:booms
     Aeff(i) = AStrUlt(i) + ((tSkin*b)/6)*(4 + z(3)/z(2) + z(1)/z(2));
+    Aactual(i) = Aeff(i);
 end
 
 % weight estimate
-AeffWeight = zeros(1,booms);
+AactaulWeight = zeros(1,booms);
 for i = 1:1:booms
-    AeffWeight(i) = Aeff(i)*density; %lb/in
+    AactaulWeight(i) = Aactual(i)*density; %lb/in
 end
-xSectWeight = sum(AeffWeight); %lb/in, weight in one fuselage cross section
+xSectWeight = sum(AactaulWeight); %lb/in, weight in one fuselage cross section
 fprintf('total cross sectional weight is %f lbf/in \n', xSectWeight);
 
 %moment of inertia calc
