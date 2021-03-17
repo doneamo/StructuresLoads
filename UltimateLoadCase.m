@@ -1,17 +1,19 @@
 %Ultimate load case, must run limit load case first
-Fcy = 48; %ksi
+Fcy = 36; %ksi
+%Fcy = 48;
 Ftu = 68; %ksi
-E = 10.9e3; %ksi
+E = 10.5e3; %ksi
 %tStr = 0.05943; %inches
-Ast = area - 0.1001;
-tStr = Ast/(0.125+0.6875+1+0.6875+0.125);
+Ast = area + 0.0105;
+tStr = Ast/(0.5+0.93+1.92+1.1);
 Along = Ast*1; %longeron area
 tLong = tStr*1; %longeron thickness, inches, determined by stiffener cross section
 My_ult = 5810780; %ftlbf ultimate case
 
 %shape of stiffeners
-zFormed = false;
-jFormed = true;
+zFormed = true;
+%jFormed = false;
+jExtrude = false;
 
 if zFormed == true
     % crippling stress of z or c formed sections
@@ -25,15 +27,23 @@ if zFormed == true
     fprintf('Z formed \n');
 end
 
-if jFormed == true
-    % J formed
-    B = 0.58;
-    m = 0.8;
-    % crippling stress of J formed sections
-    g = 7; % 5 flanges, 2 cuts
-    sigma_cr_str = B*((1/(Ast/(g*tStr^2)))^m)*((E^m * Fcy^(2-m))^(1/2));
-    sigma_cr_long = B*((1/(Along/(g*tLong^2)))^m)*((E^m * Fcy^(2-m))^(1/2));
-    fprintf('J formed \n');
+% if jFormed == true
+%     % J formed
+%     B = 0.58;
+%     m = 0.8;
+%     % crippling stress of J formed sections
+%     g = 7; % 5 flanges, 2 cuts
+%     sigma_cr_str = B*((1/(Ast/(g*tStr^2)))^m)*((E^m * Fcy^(2-m))^(1/2));
+%     sigma_cr_long = B*((1/(Along/(g*tLong^2)))^m)*((E^m * Fcy^(2-m))^(1/2));
+%     fprintf('J formed \n');
+% end
+
+if jExtrude == true
+    %calculated from excel sheet
+    %crippling stress of extuded section
+    sigma_cr_str = 25.9; %ksi
+    sigma_cr_long = 25.9; %ksi
+    fprintf('J extruded \n');
 end
 
 %define which booms are stiffeners and longerons
@@ -132,3 +142,70 @@ end
 
 minMS = min(MS);
 fprintf('Minimum MS is %f \n', minMS);
+fprintf('Area of stiffener is %f \n', Ast);
+fprintf('Thickness of stiffener is %f \n', tStr);
+
+% ============================ Determine frame spacing
+%determine centroid of stringer
+elements = 4;
+yi = [(0.93-tStr) + 1.10/2, (0.93-tStr) + tStr/2, 0.93/2, tStr/2];
+zi = [tStr/2, 1.92/2, 1.92-(tStr/2), 1.92-((0.5-tStr)/2 + tStr)];
+Ai = [1.1*tStr, (1.92-(tStr*2))*tStr, 0.93*tStr, (0.5-tStr)*tStr];
+yiXAi = yi.*Ai;
+ziXAi = zi.*Ai;
+
+ybar = sum(yiXAi)/sum(Ai);
+zbar = sum(ziXAi)/sum(Ai);
+
+%moment of intertia of stiffener x section
+Adz2 = zeros(1,elements);
+for i = 1:1:elements
+    Adz2(i) = Ai(i)*(zbar - zi(i))^2;
+end
+IyArray = [(1.1*tStr^3)/12 + Adz2(1),...
+    (tStr*(1.92 - 2*tStr)^3)/12 + Adz2(2),...
+    (0.93*tStr^3)/12 + Adz2(3),...
+    (tStr*(0.5-tStr)^3)/12 + Adz2(4)];
+Iy = sum(IyArray); %in^4
+
+Ady2 = zeros(1,elements);
+for i = 1:1:elements
+    Ady2(i) = Ai(i)*(ybar - yi(i))^2;
+end
+IzArray = [(tStr*1.1^3)/12 + Ady2(1),...
+    ((1.92-2*tStr)*tStr^3)/12 + Ady2(2),...
+    (tStr*0.93^3)/12 + Ady2(3),...
+    ((0.5-tStr)*tStr^3)/12 + Ady2(4)];
+Iz = sum(IzArray); %in^4
+
+if Iy < Iz
+    Imin = Iy;
+else
+    Imin = Iz;
+end
+
+rho = sqrt(Imin/Ast);
+
+%Euler buckling eqn
+c = 4; %end fixity both fixed
+L = rho*sqrt((c*pi^2*E)/abs(sigmax))
+
+% %=================================================
+% %skin buckling
+% kc = 3.62;
+% ks = 6;
+% kb = 0;
+% ve = 0.33;
+% [sigma_comp,tau_shear,sigma_bend] = skinBuckling(kc,ks,kb,0.1,E,ve,b)
+% 
+% Rc = sigma_comp/Fcy;
+% Rs = tau_shear/Ft;
+% MS_skin = 2/(Rc + sqrt(Rc^2 + 4*Rs^2)) - 1
+
+
+
+
+
+
+
+
