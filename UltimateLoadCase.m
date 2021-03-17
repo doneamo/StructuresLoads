@@ -1,10 +1,11 @@
 %Ultimate load case, must run limit load case first
-Fcy = 36; %ksi
+Fcy = 39; %ksi
 %Fcy = 48;
 Ftu = 68; %ksi
 E = 10.5e3; %ksi
+Ec = 10.7e3;
 %tStr = 0.05943; %inches
-Ast = area + 0.0105;
+Ast = area - 0.0135;
 tStr = Ast/(0.5+0.93+1.92+1.1);
 Along = Ast*1; %longeron area
 tLong = tStr*1; %longeron thickness, inches, determined by stiffener cross section
@@ -188,21 +189,27 @@ rho = sqrt(Imin/Ast);
 
 %Euler buckling eqn
 c = 4; %end fixity both fixed
-L = rho*sqrt((c*pi^2*E)/abs(sigmax))
-L = 21.5;
-critical = (c*pi^2*E)/(L/rho)^2
+%L = rho*sqrt((c*pi^2*E)/abs(sigmax))
+L = 24;
+critical = (c*pi^2*E)/(L/rho)^2;
+fprintf('Critical compressive load is %f \n', critical);
 
-% %=================================================
+% % %=================================================
 % %skin buckling
+% a = L;
+% sheetAR = a/b;
+% fprintf('Sheet AR is %f \n', sheetAR);
+% % determined by graphs based on sheet AR
 % kc = 3.62;
-% ks = 6;
+% ks = 5.8;
 % kb = 0;
 % ve = 0.33;
-% [sigma_comp,tau_shear,sigma_bend] = skinBuckling(kc,ks,kb,0.1,E,ve,b)
+% [sigma_comp,tau_shear,sigma_bend] = skinBuckling(kc,ks,kb,0.061,E,ve,b);
 % 
 % Rc = sigma_comp/Fcy;
 % Rs = tau_shear/Ft;
-% MS_skin = 2/(Rc + sqrt(Rc^2 + 4*Rs^2)) - 1
+% MS_skin = 2/(Rc + sqrt(Rc^2 + 4*Rs^2)) - 1;
+% fprintf('Skin MS is %f \n', MS_skin);
 
 
 
