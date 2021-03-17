@@ -189,6 +189,8 @@ rho = sqrt(Imin/Ast);
 %Euler buckling eqn
 c = 4; %end fixity both fixed
 L = rho*sqrt((c*pi^2*E)/abs(sigmax))
+L = 21.5;
+critical = (c*pi^2*E)/(L/rho)^2
 
 % %=================================================
 % %skin buckling
