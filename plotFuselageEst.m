@@ -75,7 +75,7 @@ A_min = areas(areaArrayPos+1); %boom area with 12 booms
 
 
 % Calc area of stringer based on thickness req
-tSkin = 0.061; %in
+tSkin = 0.058; %in
 fprintf('skin thickness is %f in \n', tSkin);
 Aeq_Ast = AreaByThickness(tSkin,b,z);
 Ast = area;
@@ -108,6 +108,7 @@ Iy = Aeq*dzSqrTotal; %in^4
 
 % hoop stress, internalP in lbf/ft^2, r in ft, tReq in inches
 [sigmaH,sigmaL] = hoopStress(internalP,r,tSkin);
+sigmaH = 0.85*sigmaH;
 
 % stress due to bending moment
 sigmaV = bendingMomentStress(-My,r_in,Iy);
