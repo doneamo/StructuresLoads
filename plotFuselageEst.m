@@ -2,7 +2,7 @@
 %varaibles =========================================================
 My = 3838870; %lbf ft limit load case
 T = 1261180; %ft lbf
-Vz = 195080; %lbf
+Vz = 150411; %lbf
 r = 15.833/2; %ft,avg of inner and outer
 Ft = 62; %ksi
 testCases = 80;
@@ -49,6 +49,7 @@ end
 % stifferner and skin
 
 %calc thickness for selected num of booms
+%booms = 72;
 booms = 72;
 fprintf('num of booms is %d \n', booms); 
 r_in = r *12;
@@ -75,7 +76,7 @@ A_min = areas(areaArrayPos+1); %boom area with 12 booms
 
 
 % Calc area of stringer based on thickness req
-tSkin = 0.058; %in
+tSkin = 0.052; %in
 fprintf('skin thickness is %f in \n', tSkin);
 Aeq_Ast = AreaByThickness(tSkin,b,z);
 Ast = area;
@@ -104,7 +105,13 @@ Iy = Aeq*dzSqrTotal; %in^4
 % Mohr's circle calcs ===================================
 
 % calc shear flow
-[q,tau] = shearFlow(Vz,Iy,Aeq,z,booms,tSkin,r_in,T);
+[q,tau] = shearFlow(Vz,Iy,Aeq,z,booms,tSkin,r_in,T); %with torque
+% [q,tau] = shearFlow(Vz,Iy,Aeq,z,booms,tSkin,r_in,0); %no torque
+% scatter(q,z,'k')
+% xlabel('q, Shear flow [lb_f/in]')
+% ylabel('z location, [in]')
+% avg = mean(q(19:54))
+% shearStress = avg/4
 
 % hoop stress, internalP in lbf/ft^2, r in ft, tReq in inches
 [sigmaH,sigmaL] = hoopStress(internalP,r,tSkin);
